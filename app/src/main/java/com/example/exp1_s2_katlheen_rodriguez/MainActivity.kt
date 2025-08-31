@@ -1,70 +1,142 @@
-package com.example.exp1_s2_katlheen_rodriguez
-
-//Librerías
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.exp1_s2_katlheen_rodriguez.ui.theme.Exp1S2KatlheenRodriguezTheme
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //Definir la UI usando Jetpack Compose
-        setContent {
-            Exp1S2KatlheenRodriguezTheme {
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LoginScreen(navController: NavHostController) {
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
-                Surface(
-                    modifier = Modifier.fillMaxSize(), //Ocupa toda la pantalla
-                    color = MaterialTheme.colorScheme.background //Color de fondo del tema
-                ) {
-                    //Llamamos a la función de navegación principal
-                    AppNavigation()
-                }
+    val textColor = Color.White
+    val backgroundColor = Color(0xFF1E1E1E)
+    val buttonColor = Color(0xFFFFC107)
+
+    val textStyle = TextStyle(
+        color = textColor,
+        fontFamily = FontFamily.SansSerif,
+        fontSize = 12.sp,
+        lineHeight = 18.sp,
+        textAlign = TextAlign.Start
+    )
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp)
+            .semantics { contentDescription = "Pantalla de inicio de sesión" },
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Iniciar Sesión",
+            style = textStyle
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        OutlinedTextField(
+            value = username,
+            onValueChange = { username = it },
+            label = { Text("Usuario", style = textStyle) },
+            singleLine = true,
+            textStyle = textStyle,
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics { contentDescription = "Campo de texto para ingresar el usuario" },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                containerColor = backgroundColor,
+                cursorColor = buttonColor,
+                focusedBorderColor = buttonColor,
+                unfocusedBorderColor = textColor,
+                focusedLabelColor = buttonColor,
+                unfocusedLabelColor = textColor
+            )
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Contraseña", style = textStyle) },
+            singleLine = true,
+            visualTransformation = PasswordVisualTransformation(),
+            textStyle = textStyle,
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics { contentDescription = "Campo de texto para ingresar la contraseña" },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                containerColor = backgroundColor,
+                cursorColor = buttonColor,
+                focusedBorderColor = buttonColor,
+                unfocusedBorderColor = textColor,
+                focusedLabelColor = buttonColor,
+                unfocusedLabelColor = textColor
+            )
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            onClick = { /* TODO: login */ },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = buttonColor,
+                contentColor = Color.Black
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp)
+                .semantics { contentDescription = "Botón para iniciar sesión" }
+        ) {
+            Text(text = "Ingresar", style = textStyle)
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            TextButton(
+                onClick = { /* TODO: navigate to register */ },
+                modifier = Modifier.semantics { contentDescription = "Botón para registrarse" }
+            ) {
+                Text("Registrarse", color = buttonColor, style = textStyle)
+            }
+            TextButton(
+                onClick = { /* TODO: navigate to recover */ },
+                modifier = Modifier.semantics { contentDescription = "Botón para recuperar contraseña" }
+            ) {
+                Text("Recuperar contraseña", color = buttonColor, style = textStyle)
             }
         }
     }
 }
 
+@Preview(showBackground = true)
 @Composable
-fun AppNavigation() {
-    //NavController para manejar la navegación entre pantallas
+fun LoginScreenPreview() {
     val navController = rememberNavController()
-
-    NavHost(
-        navController = navController, //Controlador de navegación
-        startDestination = "login" //Pantalla inicial
-    ) {
-        //Definición de rutaa y sus pantallas correspondientes
-        composable("login") { LoginScreen(navController) }       //Login
-        composable("register") { RegisterScreen(navController) } //Registro
-        composable("recover") { RecoverScreen(navController) }   //Recuperar contraseña
+    MaterialTheme {
+        LoginScreen(navController = navController)
     }
-}
-
-//Login
-@Composable
-fun LoginScreen(navController: NavHostController) {
-    Text("Login Screen")
-}
-
-//Registro
-@Composable
-fun RegisterScreen(navController: NavHostController) {
-    Text("Register Screen")
-}
-
-//Recuperar contraseña
-@Composable
-fun RecoverScreen(navController: NavHostController) {
-    Text("Recover Screen")
 }
